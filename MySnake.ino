@@ -32,8 +32,6 @@
 #include <MeggyJrSimple.h>    // Required code, line 1 of 2.
 
 // global variables go here
-int xplayer = 3;  // coordinates of player dot
-int yplayer = 4; 
 int dir = 0;  // top of compass, possible values are 0, 90, 180, 270
 int xapple = random(8);
 int yapple = random(8);
@@ -48,19 +46,20 @@ struct Point
 Point p1 = {3,4}; // address by saying p1.x or p1.y, ex: p1.x = 3
 Point p2 = {4,4};
 Point p3 = {5,4};
+Point p4 = {6,4};
 
-Point snakeArray[64] = {p1,p2,p3}; // just keep adding points to array to lengthen snake
-
+Point snakeArray[64] = {p1,p2,p3,p4}; // just keep adding points to array to lengthen snake
+// 64 because that is max number of dots snake could be, 64 dots in Meggy
 
 /*
 IN THE LOOP:
-  1. Draw Player (coordinates), call drawSnake();
+  1. Draw Snake (coordinates), call drawSnake();
   2. Display Slate, delay 100
-  3. Check Buttons
-  4. Update Direction if button is pressed
-  5. Update Player based on direction
-  6. Correct for Wrapping
-  7. Change from xplayer yplayer to Array to have same function
+  3. Delay (longer delay is easier)
+  4. Check Buttons 
+  5. Update Snake based on direction (copy values backwards through arrays)
+  6. Add segment to snake after apple is eaten, have success action
+  7. Repeat from Step 1
 */
 
 void setup()                    // run once, when the sketch starts
@@ -75,22 +74,22 @@ void loop()  // run over and over again
  // see variable data 
   
  Serial.print("x is");  // things in quotes show up literally
- Serial.println(xplayer);  // println is print line
+ Serial.println(p1.x);  // println is print line
  Serial.print("y is ");
- Serial.println(yplayer);
+ Serial.println(p1.y);
  Serial.println();
  
  
- DrawPx(xplayer,yplayer,Red);
+ DrawPx (p1.x,p1.y,Red);
  DrawPx (xapple,yapple,Green);
  DisplaySlate();
  delay(250);
  ClearSlate(); 
  
 CheckButtonsDown();
- if (xapple == xplayer) // collision detection (checks if snake hit apple)
+ if (xapple == p1.x) // collision detection (checks if snake hit apple)
  {
-    if (yapple == yplayer) // xapple == xplayer must be true as well
+    if (yapple == p1.y) // xapple == p1.x must be true as well
     { 
       Tone_Start(ToneA4, 100); delay(125); // apple eaten music
       Tone_Start(ToneCs5, 100); delay(125);
@@ -123,49 +122,49 @@ CheckButtonsDown();
  
  if (dir == 90)
  {
-   xplayer++;
+   p1.x++;
  }
  
  if (dir == 270)
  {
-   xplayer--;
+   p1.x--;
  }
  
  if (dir == 0)
  {
-   yplayer++;
+   p1.y++;
  }
  
  if (dir == 180)
  {
-   yplayer--;
+   p1.y--;
  }
  
- if (xplayer > 7)
+ if (p1.x > 7)
  {
-   xplayer = 0;
+   p1.x = 0;
  }
  
- if (yplayer > 7)
+ if (p1.y > 7)
  {
-   yplayer = 0;
+   p1.y = 0;
  }
  
- if (xplayer < 0)
+ if (p1.x < 0)
  {
-   xplayer = 7;
+   p1.x = 7;
  }
  
- if (yplayer < 0)
+ if (p1.y < 0)
  {
-   yplayer = 7;
+   p1.y = 7;
  }
  
 }  
 
 void drawSnake()
 {
-  for (int i = 0; i < marker; i++)
+  for (int i = 0; i < marker; i++) // i++ means i plus one
   {
     DrawPx(snakeArray[i].x,snakeArray[i].y,Red);  
   }

@@ -36,7 +36,6 @@ int dir = 0;  // top of compass, possible values are 0, 90, 180, 270
 int xapple = random(8);
 int yapple = random(8);
 int marker = 4; // same number as points in array
-boolean gotApple = true;
 
 struct Point
 {
@@ -73,7 +72,7 @@ void setup()                    // run once, when the sketch starts
 void loop()  // run over and over again
 {
  // see variable data 
-  
+ updateSnake(); // must be at top of loop so 0,0 glitch doesn't happen
  Serial.print("x is");  // things in quotes show up literally
  Serial.println(p1.x);  // println is print line
  Serial.print("y is ");
@@ -85,7 +84,6 @@ void loop()  // run over and over again
  delay(250);
  ClearSlate(); 
  
- updateSnake();
  
 CheckButtonsPress();
  
@@ -155,14 +153,15 @@ CheckButtonsPress();
  {
     if (yapple == snakeArray[0].y) // xapple == snakeArray[0].x must be true as well
     { 
-      gotApple = true; // checks that the apple has been eaten
       
       Tone_Start(ToneA4, 100); delay(125); // apple eaten music
       Tone_Start(ToneCs5, 100); delay(125);
       Tone_Start(ToneE5, 100); delay(125);
       
       xapple = random(8); // generate new apple
-      yapple = random(8);    
+      yapple = random(8);
+  
+      marker++;    
     }  
  } 
  
@@ -178,7 +177,7 @@ void drawSnake()
 
 void updateSnake()
 {
-  for (int i = marker -1; i > 0; i--)
+  for (int i = marker -1; i > 0; i--) // -1 makes marker 4 change to 3 at game start
   {
     snakeArray[i] = snakeArray [i-1];
   }

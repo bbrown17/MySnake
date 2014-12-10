@@ -179,7 +179,8 @@ void loop()  // run over and over again
   
   else // gameOver content in here
   {
-    Tone_Start(ToneB3, 250); // beeping noise with blinking X
+    ClearSlate(); // gets rid of any game apples
+    Tone_Start(ToneA3, 250); // beeping noise with blinking X
     
     DrawPx(5,5,Red); DrawPx(6,6,Red); // blinking red X
     DrawPx(2,5,Red); DrawPx(1,6,Red);
